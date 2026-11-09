@@ -2,7 +2,7 @@ name: Cập nhật thời tiết
 
 on:
   schedule:
-    - cron: "7,37 * * * *"   # mỗi 30 phút
+    - cron: "*/5 * * * *"   # mỗi 5 phút (GitHub có thể trễ vài phút lúc đông)
   workflow_dispatch:
 
 permissions:
@@ -36,6 +36,7 @@ jobs:
           git push
 
       - name: Làm mới cache jsDelivr
+        if: ${{ success() }}
         run: |
           curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/weather.js" || true
           curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/weather.json" || true

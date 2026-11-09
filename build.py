@@ -18,6 +18,13 @@ for key, loc in zip(KEYS, raw):
     }
 if not cities:
     sys.exit("no weather data")
+try:
+    old = json.load(open("weather.json", encoding="utf-8"))
+    if old.get("cities") == cities:
+        print("unchanged")
+        sys.exit(0)
+except (OSError, ValueError):
+    pass
 data = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"), "source": "Open-Meteo", "cities": cities}
 body = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 open("weather.json", "w", encoding="utf-8").write(body + "\n")
